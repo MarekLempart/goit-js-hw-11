@@ -23,7 +23,7 @@ async function searchImages(query, page = 1) {
         orientation: 'horizontal',
         safesearch: true,
         page: page,
-        per_page: 80, // 80 obrazków na stronie
+        per_page: 40, // 40 obrazków na stronie
       },
     });
     return response.data.hits;
