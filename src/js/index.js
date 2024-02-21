@@ -12,27 +12,52 @@ const loadMoreButton = document.querySelector('.load-more');
 let currentPage = 1;
 let currentQuery = '';
 
-// Funkcja wykonująca żądanie HTTP do API Pixabay
-async function searchImages(query, page = 1) {
-  try {
-    const response = await axios.get('https://pixabay.com/api/', {
-      params: {
-        key: apiKey,
-        q: query,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-        page: page,
-        per_page: 40, // 40 obrazków na stronie
-      },
-    });
-    return response.data.hits;
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    return [];
-  }
-}
+// // od Marcina
+// const queryString = 'yellow flowers';
+// const preparedQueryString = queryString.split(' ').join('+');
+// fetch(
+//   `https://pixabay.com/api/?key=42451517-7ac5a5d17c420ae469b144174&q=${input.value}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${currentPerPage}&page=${page}`
+// )
+//   .then(response => response.json())
+//   .then(({ hits }) => {
+//     const markupArray = hits.flatMap(
+//       ({
+//         webformatURL,
+//         largeImageURL,
+//         tags,
+//         likes,
+//         views,
+//         comments,
+//         downloads,
+//       }) => `
+//       <div class="photo-cart">
+//         <img src=${webformatURL} alt="${tags}" loading="lazy" />
+//         <div class="info">
+//           <p class="info-item">
+//             <b>Likes: ${likes}</b>
+//           </p>
+//         <p class="info-item">
+//           <b>Views: ${views}</b>
+//         </p>
+//         <p class="info-item">
+//           <b>Comments: ${comments}</b>
+//         </p>
+//         <p class="info-item">
+//           <b>Downloads: ${downloads}</b>
+//         </p>
+//       </div>
+//     </div>`
+//     );
 
+//     return markupArray;
+//   })
+//   .then(markupArray => {
+//     const gallery = document.querySelector('.gallery');
+//     gallery.innerHTML = markupArray.join('');
+//   });
+// //koniec
+
+// // Robione na zajęciach
 // images.hits.map(
 //   ({
 //     webformatURL,
@@ -67,16 +92,28 @@ async function searchImages(query, page = 1) {
 //   </div>
 // </div>`
 // );
+// // koniec
 
-// od Marcina
-// const queryString = "yellow flowers";
-// const preparedQueryString = queryString.split(" ").join("+");
-// fetch(
-//   `https://pixabay.com/api/?key=42451517-7ac5a5d17c420ae469b144174&q=yellow+flowers&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=1`
-// )
-//   .then((response) => response.json())
-//   .then((data) => console.log(data));
-//koniec
+// Funkcja wykonująca żądanie HTTP do API Pixabay
+async function searchImages(query, page = 1) {
+  try {
+    const response = await axios.get('https://pixabay.com/api/', {
+      params: {
+        key: apiKey,
+        q: query,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        page: page,
+        per_page: 40, // 40 obrazków na stronie
+      },
+    });
+    return response.data.hits;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    return [];
+  }
+}
 
 // Funkcja renderująca pojedynczą kartę obrazka
 function renderImageCard(image) {
@@ -96,13 +133,35 @@ function renderImageCard(image) {
   return card;
 }
 
-// Funkcja renderująca obrazy w galerii
+// // Funkcja renderująca obrazy w galerii
+// function renderImages(images) {
+//   gallery.innerHTML = ''; // Wyczyść galerię przed renderowaniem nowych obrazków
+//   images.forEach(image => {
+//     const card = renderImageCard(image);
+//     gallery.appendChild(card);
+//   });
+// }
+
+// Funkcja renderująca obrazy w galerii za pomocą map
 function renderImages(images) {
-  gallery.innerHTML = ''; // Wyczyść galerię przed renderowaniem nowych obrazków
-  images.forEach(image => {
-    const card = renderImageCard(image);
-    gallery.appendChild(card);
-  });
+  const galleryMarkup = images
+    .map(image => {
+      return `
+      <div class="photo-card">
+        <a href="${image.largeImageURL}" class="lightbox-item">
+          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
+        </a>
+        <div class="info">
+          <p class="info-item"><b>Likes:</b> ${image.likes}</p>
+          <p class="info-item"><b>Views:</b> ${image.views}</p>
+          <p class="info-item"><b>Comments:</b> ${image.comments}</p>
+          <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
+        </div>
+      </div>`;
+    })
+    .join('');
+
+  gallery.innerHTML = galleryMarkup;
 }
 
 // Funkcja obsługująca wyszukiwanie
