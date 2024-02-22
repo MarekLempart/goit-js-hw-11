@@ -1,3 +1,18 @@
+.search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Wyśrodkowanie elementów w pionie */
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center; /* Wyśrodkowanie elementów w pionie */
+}
+
+.search-input {
+  margin-right: 10px; /* Margines między polem wyszukiwania a przyciskiem */
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -5,11 +20,12 @@
 }
 
 .photo-card {
-  width: calc(25% - 20px); /* 25% szerokości - marginesy */
+  width: calc(50% - 20px); /* 50% szerokości - marginesy */
   margin-bottom: 20px;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Cień dla efektu trójwymiarowości */
 }
 
 .photo-card img {
@@ -20,4 +36,41 @@
 
 .photo-card:hover img {
   transform: scale(1.05); /* Powiększenie zdjęcia po najechaniu */
+}
+
+@media screen and (min-width: 768px) {
+  .photo-card {
+    width: calc(33% - 20px); /* 33% szerokości - marginesy */
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .photo-card {
+    width: calc(25% - 20px); /* 25% szerokości - marginesy */
+  }
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 5px; /* Odległość od zdjęcia */
+}
+
+.info p {
+  margin: 0;
+  font-size: 14px; /* Rozmiar czcionki dla mobile */
+}
+
+@media screen and (min-width: 768px) {
+  .info p {
+    font-size: 16px; /* Zwiększenie rozmiaru czcionki dla tabletów */
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .info p {
+    width: 50%; /* Dwie kolumny dla urządzeń mobilnych */
+  }
 }

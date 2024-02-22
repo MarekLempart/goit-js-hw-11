@@ -11,9 +11,10 @@ const loadMoreButton = document.querySelector('.load-more');
 
 let currentPage = 1;
 let currentQuery = '';
+let lightbox;
 
 // Funkcja wykonująca żądanie HTTP do API Pixabay
-async function searchImages(query, page = 1) {
+const searchImages = async (query, page = 1) => {
   try {
     const response = await axios.get('https://pixabay.com/api/', {
       params: {
@@ -31,37 +32,10 @@ async function searchImages(query, page = 1) {
     console.error('Error fetching images:', error);
     return [];
   }
-}
-
-// Funkcja renderująca pojedynczą kartę obrazka
-function renderImageCard(image) {
-  const card = document.createElement('div');
-  card.classList.add('photo-card');
-  card.innerHTML = `
-    <a href="${image.largeImageURL}" class="lightbox-item">
-      <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
-    </a>
-    <div class="info">
-      <p class="info-item"><b>Likes:</b> ${image.likes}</p>
-      <p class="info-item"><b>Views:</b> ${image.views}</p>
-      <p class="info-item"><b>Comments:</b> ${image.comments}</p>
-      <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
-    </div>
-  `;
-  return card;
-}
-
-// // Funkcja renderująca obrazy w galerii
-// function renderImages(images) {
-//   gallery.innerHTML = ''; // Wyczyść galerię przed renderowaniem nowych obrazków
-//   images.forEach(image => {
-//     const card = renderImageCard(image);
-//     gallery.appendChild(card);
-//   });
-// }
+};
 
 // Funkcja renderująca obrazy w galerii za pomocą map
-function renderImages(images) {
+const renderImages = images => {
   const galleryMarkup = images
     .map(image => {
       return `
@@ -70,20 +44,27 @@ function renderImages(images) {
           <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
         </a>
         <div class="info">
-          <p class="info-item"><b>Likes:</b> ${image.likes}</p>
-          <p class="info-item"><b>Views:</b> ${image.views}</p>
-          <p class="info-item"><b>Comments:</b> ${image.comments}</p>
-          <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
+          <p class="info-item"><b>Likes:</b><br>${image.likes}</p>
+          <p class="info-item"><b>Views:</b><br>${image.views}</p>
+          <p class="info-item"><b>Comments:</b><br>${image.comments}</p>
+          <p class="info-item"><b>Downloads:</b><br>${image.downloads}</p>
         </div>
       </div>`;
     })
     .join('');
 
   gallery.innerHTML = galleryMarkup;
-}
+
+  // Inicjalizuj lub odśwież SimpleLightbox po dodaniu nowych obrazków
+  if (!lightbox) {
+    lightbox = new SimpleLightbox('.lightbox-item');
+  } else {
+    lightbox.refresh();
+  }
+};
 
 // Funkcja obsługująca wyszukiwanie
-async function handleSearch(event) {
+const handleSearch = async event => {
   event.preventDefault();
   const query = searchForm.searchQuery.value.trim();
   if (query === '') {
@@ -111,10 +92,10 @@ async function handleSearch(event) {
 
   // Pokaż przycisk "Load more"
   loadMoreButton.style.display = 'block';
-}
+};
 
 // Funkcja obsługująca ładowanie kolejnych obrazków
-async function loadMoreImages() {
+const loadMoreImages = async () => {
   currentPage++;
   const images = await searchImages(currentQuery, currentPage);
   if (images.length === 0) {
@@ -124,20 +105,36 @@ async function loadMoreImages() {
     loadMoreButton.style.display = 'none'; // Ukryj przycisk "Load more" na końcu wyników
     return;
   }
-  renderImages(images);
+
+  // Renderuj nowe obrazy na końcu galerii
+  const galleryMarkup = images
+    .map(image => {
+      return `
+      <div class="photo-card">
+        <a href="${image.largeImageURL}" class="lightbox-item">
+          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
+        </a>
+        <div class="info">
+          <p class="info-item"><b>Likes:</b><br>${image.likes}</p>
+          <p class="info-item"><b>Views:</b><br>${image.views}</p>
+          <p class="info-item"><b>Comments:</b><br>${image.comments}</p>
+          <p class="info-item"><b>Downloads:</b><br>${image.downloads}</p>
+        </div>
+      </div>`;
+    })
+    .join('');
+
+  gallery.innerHTML += galleryMarkup;
 
   // Odśwież SimpleLightbox po dodaniu nowych obrazków
-  const lightbox = new SimpleLightbox('.lightbox-item');
-  lightbox.refresh();
+  if (lightbox) {
+    lightbox.refresh();
+  }
 
-  // Płynne przewijanie strony
-  const { height: cardHeight } =
-    gallery.firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
+  // Przewiń widok do góry nowych obrazków
+  const lastAddedImage = gallery.lastElementChild;
+  lastAddedImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 // Obsługa zdarzenia submit formularza
 searchForm.addEventListener('submit', handleSearch);

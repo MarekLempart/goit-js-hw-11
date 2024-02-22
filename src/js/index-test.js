@@ -6,7 +6,7 @@ fetch(
 )
   .then(response => response.json())
   .then(({ hits }) => {
-    const markupArray = hits.flatMap(
+    const markupArray = hits.map(
       ({
         webformatURL,
         largeImageURL,
