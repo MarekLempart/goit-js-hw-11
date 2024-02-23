@@ -7,6 +7,7 @@ const loadMoreButton = document.querySelector('.load-more');
 
 let currentPage = 1;
 let currentQuery = '';
+let backgroundImageInterval; // Zmienna do przechowywania interwału zmiany tła
 
 // Funkcja obsługująca wyszukiwanie
 const handleSearch = async event => {
@@ -16,6 +17,7 @@ const handleSearch = async event => {
     return; // Nie wykonuj wyszukiwania dla pustego zapytania
   }
 
+  // Zapisz aktualne zapytanie
   currentQuery = query;
 
   // Wyślij żądanie HTTP
@@ -30,6 +32,9 @@ const handleSearch = async event => {
   // Zaktualizuj stronę i wyrenderuj obrazy
   currentPage = 1;
   renderImages(images);
+
+  // Ustaw tło na losowy obrazek z galerii
+  setRandomBackgroundImage(images);
 
   // Pokaż powiadomienie o liczbie znalezionych obrazków
   Notiflix.Notify.success(`Hooray! We found ${images.length} images.`);
@@ -54,6 +59,9 @@ const loadMoreImages = async () => {
   // Renderuj nowe obrazy na końcu galerii
   renderImages(images);
 
+  // Ustaw tło na losowy obrazek z galerii
+  setRandomBackgroundImage(images);
+
   // Sprawdź, czy faktycznie dodano nowe obrazy
   const newImageCount =
     document.querySelectorAll('.photo-card').length - previousImageCount;
@@ -68,6 +76,24 @@ const loadMoreImages = async () => {
   } else {
     Notiflix.Notify.info('No new images loaded.');
   }
+};
+
+// Funkcja ustawiająca tło na losowy obrazek z galerii
+const setRandomBackgroundImage = images => {
+  // Losujemy losowy indeks z galerii
+  const randomIndex = Math.floor(Math.random() * images.length);
+  const randomImage = images[randomIndex];
+
+  // Ustawiamy obrazek jako tło strony
+  document.body.style.backgroundImage = `url(${randomImage.webformatURL})`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+
+  // Ustawiamy interwał zmiany tła co 5 sekund
+  clearInterval(backgroundImageInterval);
+  backgroundImageInterval = setInterval(() => {
+    setRandomBackgroundImage(images);
+  }, 5000);
 };
 
 searchForm.addEventListener('submit', handleSearch);
