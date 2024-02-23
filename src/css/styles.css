@@ -49,6 +49,7 @@ button:active {
 }
 
 #scrollToTopButton {
+  font-size: 0.9em;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -164,7 +165,7 @@ img {
   }
 
   .info p {
-    font-size: 16px; /* Zwiększenie rozmiaru czcionki dla tabletów */
+    font-size: 14px; /* Zwiększenie rozmiaru czcionki dla tabletów */
   }
 }
 
