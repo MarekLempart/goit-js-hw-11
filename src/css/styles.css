@@ -121,7 +121,7 @@ img {
 
 .info p {
   margin: 0;
-  font-size: 8px; /* Rozmiar czcionki dla mobile */
+  font-size: 6px; /* Rozmiar czcionki dla mobile */
 }
 
 @media screen and (max-width: 767px) {
