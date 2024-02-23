@@ -23,7 +23,7 @@ const renderImages = images => {
     .join('');
 
   const gallery = document.querySelector('.gallery');
-  gallery.innerHTML = galleryMarkup;
+  gallery.innerHTML += galleryMarkup;
 
   // Inicjalizuj lub odśwież SimpleLightbox po dodaniu nowych obrazków
   if (!lightbox) {

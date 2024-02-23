@@ -42,6 +42,7 @@ const handleSearch = async event => {
 // Funkcja obsługująca ładowanie kolejnych obrazków
 const loadMoreImages = async () => {
   currentPage++;
+  const previousImageCount = document.querySelectorAll('.photo-card').length; // Liczba obecnych obrazków
   const images = await searchImages(currentQuery, currentPage);
   if (images.length === 0) {
     Notiflix.Notify.info(
@@ -54,9 +55,41 @@ const loadMoreImages = async () => {
   // Renderuj nowe obrazy na końcu galerii
   renderImages(images);
 
-  // Przewiń widok do góry nowych obrazków
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Sprawdź, czy faktycznie dodano nowe obrazy
+  const newImageCount =
+    document.querySelectorAll('.photo-card').length - previousImageCount;
+  if (newImageCount > 0) {
+    // Przewiń widok do góry nowych obrazków
+
+    const firstNewImage = document.querySelector('.gallery').lastElementChild;
+    firstNewImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Wyświetl informację o liczbie nowych obrazków
+    Notiflix.Notify.success(`${newImageCount} new images loaded.`);
+  } else {
+    Notiflix.Notify.info('No new images loaded.');
+  }
 };
+
+// // Funkcja obsługująca ładowanie kolejnych obrazków
+// const loadMoreImages = async () => {
+//   currentPage++;
+//   const images = await searchImages(currentQuery, currentPage);
+//   if (images.length === 0) {
+//     Notiflix.Notify.info(
+//       "We're sorry, but you've reached the end of search results."
+//     );
+//     loadMoreButton.style.display = 'none'; // Ukryj przycisk "Load more" na końcu wyników
+//     return;
+//   }
+
+//   // Renderuj nowe obrazy na końcu galerii
+//   renderImages(images);
+
+//   // Przewiń widok do góry nowych obrazków
+//   const lastAddedImage = gallery.lastElementChild;
+//   lastAddedImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// };
 
 searchForm.addEventListener('submit', handleSearch);
 loadMoreButton.addEventListener('click', loadMoreImages);
