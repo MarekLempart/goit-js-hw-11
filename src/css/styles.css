@@ -22,26 +22,48 @@ body {
 
 .search-input {
   margin: 0px 10px 25px;
-  padding: 5px 10px;
-  font-size: 1.5em;
+  padding: 2px 5px;
+  font-size: 1em;
   border-radius: 10px;
 }
 
 button {
-  font-size: 1.5em;
+  font-size: 1em;
   padding: 5px 10px;
   border: none;
   border-radius: 10px;
   background-color: #b2b3c3;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+button:hover {
+  background-color: #5e5f67;
 }
 
 button:active {
-  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.6);
 }
 
 .search-btn {
   margin-bottom: 25px;
+}
+
+#scrollToTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none; /* Początkowo ukryj przycisk */
+  padding: 10px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 999; /* Upewnij się, że przycisk jest na wierzchu innych elementów */
+}
+
+#scrollToTopButton:hover {
+  background-color: #0056b3;
 }
 
 .load-more {
@@ -77,7 +99,7 @@ img {
 
 .photo-card img {
   width: 100%;
-  height: auto;
+  height: 75%;
   object-fit: cover;
   overflow: hidden;
   border-radius: 20px;
@@ -88,30 +110,12 @@ img {
   transform: scale(1.05); /* Powiększenie zdjęcia po najechaniu */
 }
 
-@media screen and (min-width: 768px) {
-  .photo-card {
-    width: calc(33% - 20px); /* 33% szerokości - marginesy */
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .photo-card {
-    width: calc(25% - 20px); /* 25% szerokości - marginesy */
-  }
-}
-
-@media screen and (min-width: 1600px) {
-  .photo-card {
-    width: calc(20% - 20px); /* 20% szerokości - marginesy */
-  }
-}
-
 .info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin: 5px 5px 10px;
+  margin: 0px 5px 0px 5px;
 }
 
 .info p {
@@ -119,14 +123,53 @@ img {
   font-size: 8px; /* Rozmiar czcionki dla mobile */
 }
 
+@media screen and (max-width: 767px) {
+  .info p {
+    width: 50%; /* Dwie kolumny dla urządzeń mobilnych */
+  }
+}
+
 @media screen and (min-width: 768px) {
+  .photo-card {
+    width: calc(33% - 20px); /* 33% szerokości - marginesy */
+  }
+  .search-input {
+    margin: 0px 10px 25px;
+    padding: 5px 10px;
+    font-size: 1.3em;
+    border-radius: 20px;
+  }
+
+  button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+
+  .info {
+    margin: 10px 5px 0px 5px;
+  }
+
+  .info p {
+    font-size: 10px; /* Zwiększenie rozmiaru czcionki dla tabletów */
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .photo-card {
+    width: calc(25% - 20px); /* 25% szerokości - marginesy */
+  }
+  .info {
+    margin: 20px 5px 0px 5px;
+  }
+
   .info p {
     font-size: 16px; /* Zwiększenie rozmiaru czcionki dla tabletów */
   }
 }
 
-@media screen and (max-width: 767px) {
-  .info p {
-    width: 50%; /* Dwie kolumny dla urządzeń mobilnych */
+@media screen and (min-width: 1600px) {
+  .photo-card {
+    width: calc(20% - 20px); /* 20% szerokości - marginesy */
   }
 }
