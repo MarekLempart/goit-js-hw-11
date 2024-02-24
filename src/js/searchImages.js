@@ -15,6 +15,7 @@ const searchImages = async (query, page = 1) => {
         per_page: 40, // 40 obrazków na stronie
       },
     });
+
     return response.data.hits;
   } catch (error) {
     console.error('Error fetching images:', error);
