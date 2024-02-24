@@ -8,6 +8,7 @@ const loadMoreButton = document.querySelector('.load-more');
 let currentPage = 1;
 let currentQuery = '';
 let backgroundImageInterval; // Zmienna do przechowywania interwału zmiany tła
+let totalDisplayedImages = 0; // Liczba obrazków wyświetlonych na stronie
 
 // Funkcja obsługująca wyszukiwanie
 const handleSearch = async event => {
@@ -20,15 +21,17 @@ const handleSearch = async event => {
   // Zapisz aktualne zapytanie
   currentQuery = query;
 
-  // Wyczyść zawartość galerii
+  // Wyczyść zawartość galerii i zresetuj liczbę wyświetlonych obrazków
   document.querySelector('.gallery').innerHTML = '';
+  totalDisplayedImages = 0;
 
   // Wyślij żądanie HTTP
   const images = await searchImages(query);
   if (images.length === 0) {
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
     );
+    loadMoreButton.style.display = 'none'; // Ukryj przycisk "Load more" na końcu wyników
     return;
   }
 
@@ -39,8 +42,11 @@ const handleSearch = async event => {
   // Ustaw tło na losowy obrazek z galerii
   setRandomBackgroundImage(images);
 
+  // Zaktualizuj liczbę wyświetlonych obrazków
+  totalDisplayedImages += images.length;
+
   // Pokaż powiadomienie o liczbie znalezionych obrazków
-  Notiflix.Notify.success(`Hooray! We found ${images.length} images.`);
+  Notiflix.Notify.success(`Hooray! We found ${totalDisplayedImages} images.`);
 
   // Pokaż przycisk "Load more"
   loadMoreButton.style.display = 'block';
@@ -51,6 +57,7 @@ const loadMoreImages = async () => {
   currentPage++;
   const previousImageCount = document.querySelectorAll('.photo-card').length; // Liczba obecnych obrazków
   const images = await searchImages(currentQuery, currentPage);
+  // Ukryj przycisk "Load more" jeśli nie ma więcej obrazków
   if (images.length === 0) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
@@ -74,8 +81,11 @@ const loadMoreImages = async () => {
     const firstNewImage = document.querySelector('.gallery').lastElementChild;
     firstNewImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    // Zaktualizuj liczbę wyświetlonych obrazków
+    totalDisplayedImages += newImageCount;
+
     // Wyświetl informację o liczbie nowych obrazków
-    Notiflix.Notify.success(`${newImageCount} new images loaded.`);
+    Notiflix.Notify.success(`${totalDisplayedImages} images loaded.`);
   } else {
     Notiflix.Notify.info('No new images loaded.');
   }
