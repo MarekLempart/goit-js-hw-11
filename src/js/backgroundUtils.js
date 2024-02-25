@@ -13,7 +13,7 @@ const setRandomBackgroundImage = images => {
   const randomImage = images[randomIndex];
 
   // Ustawiamy obrazek jako tło strony
-  document.body.style.backgroundImage = `url(${randomImage.webformatURL})`;
+  document.body.style.backgroundImage = `url(${randomImage.largeImageURL})`;
   document.body.style.backgroundSize = 'cover';
   document.body.style.backgroundPosition = 'center';
 
