@@ -45,11 +45,18 @@ const handleSearch = async event => {
   // Zaktualizuj liczbę wyświetlonych obrazków
   totalDisplayedImages += images.length;
 
+  // Pokaż przycisk "Load more", jeśli pobrano mniej niż 40 obrazków
+  if (images.length < 40) {
+    loadMoreButton.style.display = 'none';
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  } else {
+    loadMoreButton.style.display = 'block';
+  }
+
   // Pokaż powiadomienie o liczbie znalezionych obrazków
   Notiflix.Notify.success(`Hooray! We found ${totalDisplayedImages} images.`);
-
-  // Pokaż przycisk "Load more"
-  loadMoreButton.style.display = 'block';
 };
 
 // Funkcja obsługująca ładowanie kolejnych obrazków
@@ -77,7 +84,6 @@ const loadMoreImages = async () => {
     document.querySelectorAll('.photo-card').length - previousImageCount;
   if (newImageCount > 0) {
     // Przewiń widok do góry nowych obrazków
-
     const firstNewImage = document.querySelector('.gallery').lastElementChild;
     firstNewImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
 

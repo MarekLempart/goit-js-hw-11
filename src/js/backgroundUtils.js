@@ -2,6 +2,12 @@ let backgroundImageInterval; // Zmienna do przechowywania interwału zmiany tła
 
 // Funkcja ustawiająca tło na losowy obrazek z galerii
 const setRandomBackgroundImage = images => {
+  // Sprawdź, czy tablica obrazków jest pusta
+  if (images.length === 0) {
+    console.error('No images available to set background.');
+    return;
+  }
+
   // Losujemy losowy indeks z galerii
   const randomIndex = Math.floor(Math.random() * images.length);
   const randomImage = images[randomIndex];
