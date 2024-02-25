@@ -95,6 +95,14 @@ const loadMoreImages = async () => {
   } else {
     Notiflix.Notify.info('No new images loaded.');
   }
+
+  // Ukryj przycisk "Load more" jeśli pobrano mniej niż 40 obrazków
+  if (images.length < 40) {
+    loadMoreButton.style.display = 'none';
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
 };
 
 const scrollToTopButton = document.getElementById('scrollToTopButton');
