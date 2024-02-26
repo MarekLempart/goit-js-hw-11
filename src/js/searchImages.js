@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const apiKey = '42451517-7ac5a5d17c420ae469b144174'; // Zastąp 'YOUR_API_KEY' swoim kluczem API Pixabay
 
+let perPege = 40; // liczba wyświetlanych obrazków - 40 na stronie
+
 const searchImages = async (query, page = 1) => {
   try {
     const response = await axios.get('https://pixabay.com/api/', {
@@ -12,7 +14,7 @@ const searchImages = async (query, page = 1) => {
         orientation: 'horizontal',
         safesearch: true,
         page: page,
-        per_page: 40, // 40 obrazków na stronie
+        per_page: perPage,
       },
     });
 
