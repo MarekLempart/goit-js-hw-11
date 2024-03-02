@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiKey = '42451517-7ac5a5d17c420ae469b144174'; // Zastąp 'YOUR_API_KEY' swoim kluczem API Pixabay
 
-let perPege = 40; // liczba wyświetlanych obrazków - 40 na stronie
+let perPage = 40; // liczba wyświetlanych obrazków - 40 na stronie
 
 const searchImages = async (query, page = 1) => {
   try {
